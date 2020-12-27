@@ -98,7 +98,7 @@ rxObserver((){
 
 ```
 
-> **IMPORTANT**: É realmente necessário que os **computed** sejam **Getters** e não atribuições.
+> **IMPORTANT**: É realmente necessário que os **computed** sejam **Getters** e não atribuições. O reação acontecerá quando qualquer um dos **RxNotifier** modificar o valor.
 
 ## Usando Getters
 
