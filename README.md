@@ -1,7 +1,7 @@
 # rx_notifier
 
-The [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) é uma forma simples e nativa de reatividade do Flutter.
-Esta extension visa aplicar de forma transparente a **functional reactive programming (TFRP)**.
+The [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) is a simple, native form of Flutter reactivity.
+This extension aims to transparently apply **functional reactive programming (TFRP)**.
 
 ## Install
 
@@ -12,33 +12,33 @@ dependencies:
   rx_notifier: <version>
 ```
 
-## Entendendo a Extensão.
+## Understanding Extension.
 
-Está extensão acrescenta uma classe **RxNotifier** e um conversor **ValueNotifier -> RxNotifier** para que possa ser observado de forma transparente pela função **rxObserver()** e pelo [Widget](https://api.flutter.dev/flutter/widgets/Widget-class.html) **RxBuilder**.
+This extension adds a class **RxNotifier** and a converter **ValueNotifier -> RxNotifier** so that it can be observed transparently by the function **rxObserver()** and [Widget](https://api.flutter.dev/flutter/widgets/Widget-class.html) **RxBuilder**.
 
-O **RxNotifier** é diretamente uma extensão de [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html) então qualquer objeto que o implemente pode ser convertido para **RxNotifier**
+The **RxNotifier** is directly an extension of [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html) then any object that implements it can be converted to **RxNotifier**
 
-A única diferença do **RxNofifier** para o [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) é a função de assinatura automática nos Observadores **rxObserver()** e **RxBuilder**, muito semelhante as [reactions do MobX](https://pub.dev/packages/mobx).
+The only difference from **RxNofifier** to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) is the automatic signature function in Observers **rxObserver()** e **RxBuilder**, very similar to [MobX reactions](https://pub.dev/packages/mobx).
 
 ## Using
 
-Para começar instancie um RxNofifier.
+To start, instantiate an RxNofifier.
 
 ```dart
 final counter = RxNotifier<int>(0);
 
 ```
 
-ou converta um [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) já existente usando o método **.rx()**:
+or convert a  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) already existing using the **.rx()** method:
 
 ```dart
 
 final counter = myValueNotifierCounter.rx();
 
 ```
-> **IMPORTANT**: O método **rx()** foi adicionado ao [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) usando [Extension Methods](https://dart.dev/guides/language/extension-methods).
+> **IMPORTANT**: The **rx()** method has been added to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) using [Extension Methods](https://dart.dev/guides/language/extension-methods).
 
-Atribuímos um novo valor:
+We assign a new value:
 
 ```dart
 
@@ -50,7 +50,7 @@ increment(){
 
 ```
 
-E escutamos as alterações usando o **rxObserver**:
+And we hear the changes using **rxObserver**:
 
 ```dart
 
@@ -63,7 +63,7 @@ disposer();
 
 ```
 
-Ou escutamos na árvore de Widget usando o **RxBuilder**:
+Or we listen in the Widget tree using **RxBuilder**:
 
 
 ```dart
@@ -76,11 +76,11 @@ Widget builder(BuildContext context){
 
 ```
 
-Esse é o uso transparente de reatividade individual, porém podemos também combinar **RxNotifier Objects** produzindo um novo valor. Essa técnica se chama **Computed**
+This is the transparent use of individual reactivity, but we can also combine **RxNotifier Objects** producing new value. This technique is called **Computed**
 
-## Computed: Combinando valores reativos
+## Computed: Combining reactive values
 
-Para combinar dois ou mais **RxNotifier Objects** precisamos usar um **getter** retornando um novo valor combinado:
+To combine two or more **RxNotifier Objects** we need to use a **getter** returning a new combined value:
 
 ```dart
 
@@ -98,11 +98,11 @@ rxObserver((){
 
 ```
 
-> **IMPORTANT**: É realmente necessário que os **computed** sejam **Getters** e não atribuições. A reação acontecerá quando qualquer um dos **RxNotifier** modificar o valor.
+> **IMPORTANT**: It is really necessary that **computed** are **Getters** and not assignments. The reaction will happen when any of the **RxNotifier** changes the value.
 
-## Usando Getters
+## Using Getters
 
-Podemos também usar **getters** nos valores reativos tornando, vamos repetir o exemplo acima:
+We can also use **getters** in reactive values making, let's repeat the example above:
 
 ```dart
 
@@ -123,9 +123,9 @@ rxObserver((){
 
 ```
 
-## Filtros
+## Filters
 
-Tanto o **rxObserver** quanto o **RxBuilder** tem a propriedade **filter** que é uma função que retorna um **bool**. Use isso para definir quando(ou não) refletir as alterações:
+Both **rxObserver** and **RxBuilder** have a property filter **filter** which is a function that returns a **bool**. Use this to define when (or not) to reflect changes:
 
 ```dart
 
@@ -138,10 +138,10 @@ Widget builder(BuildContext context){
 
 ```
 
-## Potencialize mais o ValueNotifier
+## Empower more the ValueNotifier
 
-O [functional_listener](https://pub.dev/packages/functional_listener) adiciona map, where, listen, debounce, combineLatest e várias outras funções para o ValueNotifier.
-Muito obrigado [Thomas Burkhart](https://twitter.com/Thomasburkhartb) por isso!!!
+The [functional_listener](https://pub.dev/packages/functional_listener) add map, where, listen, debounce, combineLatest and several other functions for  ValueNotifier.
+Thank you very much [Thomas Burkhart](https://twitter.com/Thomasburkhartb) for that!!!
 
 ## Features and bugs
 
