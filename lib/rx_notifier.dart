@@ -23,19 +23,21 @@ mixin _Transparent<T> on ValueListenable<T> {
 
 class RxContext {
   bool isTracking = false;
-  Set<Listenable> _listOfListenable = {};
+  List<Set<Listenable>> _listOfListenable = [];
 
   void track() {
     isTracking = true;
+    _listOfListenable.add({});
   }
 
   Listenable? untrack() {
     isTracking = false;
-    if (_listOfListenable.isNotEmpty) {
-      final listenable = _listOfListenable.length == 1
-          ? _listOfListenable.first
-          : Listenable.merge(_listOfListenable.toList());
-      _listOfListenable.clear();
+    final listenables = _listOfListenable.last;
+    _listOfListenable.removeLast();
+    if (listenables.isNotEmpty) {
+      final listenable = listenables.length == 1
+          ? listenables.first
+          : Listenable.merge(listenables.toList());
       return listenable;
     }
     print('--- No Rx variables in that space.');
@@ -44,11 +46,11 @@ class RxContext {
 
   void reportRead(Listenable listenable) {
     if (!isTracking) return;
-    _listOfListenable.add(listenable);
+    _listOfListenable.last.add(listenable);
   }
 }
 
-RxDisposer rxObserver(Function fn, {bool Function()? filter}) {
+RxDisposer rxObserver(void Function() fn, {bool Function()? filter}) {
   _rxMainContext.track();
   filter?.call();
   fn();
