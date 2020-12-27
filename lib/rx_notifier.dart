@@ -59,13 +59,10 @@ RxDisposer rxObserver(Function fn, {bool Function()? filter}) {
     }
   };
 
-  if (listenable != null) {
-    listenable.addListener(dispach);
-  }
+  listenable?.addListener(dispach);
+
   return () {
-    if (listenable != null) {
-      listenable.removeListener(dispach);
-    }
+    listenable?.removeListener(dispach);
   };
 }
 
