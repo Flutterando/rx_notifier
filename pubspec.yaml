@@ -1,12 +1,10 @@
 name: rx_notifier
 description: Extension to ValueNotifier by transparently applying functional reactive programming (TFRP)
-version: 0.0.1
-author:
-homepage:
+version: 0.0.2
+homepage: https://github.com/Flutterando/rx_notifier
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:

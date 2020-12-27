@@ -5,9 +5,9 @@ import 'package:rx_notifier/rx_notifier.dart';
 
 void main() {
   test('should dispach rx value', () {
-    final c = Rx<int>(0);
+    final c = RxNotifier<int>(0);
     final list = <int>[];
-    transparent(() {
+    rxObserver(() {
       list.add(c.value);
     });
     c.value = 1;
@@ -21,7 +21,7 @@ void main() {
   test('convert ValueListenable to Rx', () {
     final c = ValueNotifier(0).rx;
     final list = <int>[];
-    transparent(() {
+    rxObserver(() {
       list.add(c.value);
     });
     c.value = 1;
@@ -35,7 +35,7 @@ void main() {
   test('filter rx', () {
     final c = ValueNotifier(0).rx;
     final list = <int>[];
-    transparent(() {
+    rxObserver(() {
       list.add(c.value);
     }, filter: () => c.value != 3);
     c.value = 1;
@@ -48,11 +48,11 @@ void main() {
   });
 
   test('computed values', () {
-    final a = Rx(0);
+    final a = RxNotifier(0);
     final b = ValueNotifier(0).rx;
     final listA = <int>[];
     final listB = <int>[];
-    transparent(() {
+    rxObserver(() {
       print("A: ${a.value} | B: ${b.value}");
       listA.add(a.value);
       listB.add(b.value);

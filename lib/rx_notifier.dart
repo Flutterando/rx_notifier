@@ -1,15 +1,16 @@
 library value_notifier_extension;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 final _rxMainContext = RxContext();
 
-class Rx<T> = ValueNotifier<T> with _Transparent<T>;
+class RxNotifier<T> = ValueNotifier<T> with _Transparent<T>;
 
 typedef RxDisposer = void Function();
 
 extension ValueNotifierParse<T> on ValueListenable<T> {
-  Rx<T> get rx => Rx<T>(value);
+  RxNotifier<T> get rx => RxNotifier<T>(value);
 }
 
 mixin _Transparent<T> on ValueListenable<T> {
@@ -28,7 +29,7 @@ class RxContext {
     isTracking = true;
   }
 
-  Listenable untrack() {
+  Listenable? untrack() {
     isTracking = false;
     if (_listOfListenable.isNotEmpty) {
       final listenable = _listOfListenable.length == 1
@@ -47,7 +48,7 @@ class RxContext {
   }
 }
 
-RxDisposer transparent(Function fn, {bool Function() filter}) {
+RxDisposer rxObserver(Function fn, {bool Function()? filter}) {
   _rxMainContext.track();
   filter?.call();
   fn();
@@ -66,4 +67,59 @@ RxDisposer transparent(Function fn, {bool Function() filter}) {
       listenable.removeListener(dispach);
     }
   };
+}
+
+class RxBuilder extends StatefulWidget {
+  final Widget Function(BuildContext context) builder;
+  final bool Function()? filter;
+  const RxBuilder({
+    Key? key,
+    required this.builder,
+    this.filter,
+  }) : super(key: key);
+
+  @override
+  _RxBuilderState createState() => _RxBuilderState();
+}
+
+class _RxBuilderState extends State<RxBuilder> {
+  Widget? child;
+  Listenable? listenable;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initTrack();
+  }
+
+  void _initTrack() {
+    listenable?.removeListener(_listenerFunc);
+    _rxMainContext.track();
+    widget.filter?.call();
+    child = widget.builder(context);
+    listenable = _rxMainContext.untrack();
+
+    if (listenable != null) {
+      listenable?.addListener(_listenerFunc);
+    }
+  }
+
+  void _listenerFunc() {
+    if (widget.filter?.call() ?? true) {
+      setState(() {
+        child = widget.builder(context);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    listenable?.removeListener(_listenerFunc);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return child!;
+  }
 }
