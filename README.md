@@ -1,7 +1,7 @@
 # rx_notifier
 
 The [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) é uma forma simples e nativa de reatividade do Flutter.
-Está extension visa aplicar de forma transparente a **functional reactive programming (TFRP)**.
+Esta extension visa aplicar de forma transparente a **functional reactive programming (TFRP)**.
 
 ## Install
 
@@ -16,20 +16,20 @@ dependencies:
 
 Está extensão acrescenta uma classe **RxNotifier** e um conversor **ValueNotifier -> RxNotifier** para que possa ser observado de forma transparente pela função **rxObserver()** e pelo [Widget](https://api.flutter.dev/flutter/widgets/Widget-class.html) **RxBuilder**.
 
-O **RxNotifier** é diretamente  uma extensão de [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html) então qualquer objeto que o implemente pode ser convertido para **RxNotifier**
+O **RxNotifier** é diretamente uma extensão de [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html) então qualquer objeto que o implemente pode ser convertido para **RxNotifier**
 
 A única diferença do **RxNofifier** para o [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) é a função de assinatura automática nos Observadores **rxObserver()** e **RxBuilder**, muito semelhante as [reactions do MobX](https://pub.dev/packages/mobx).
 
 ## Using
 
-Para começar instancia um RxNofifier.
+Para começar instancie um RxNofifier.
 
 ```dart
 final counter = RxNotifier<int>(0);
 
 ```
 
-ou conversa um [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) já existente usando o método **.rx()**:
+ou converta um [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) já existente usando o método **.rx()**:
 
 ```dart
 
@@ -38,7 +38,7 @@ final counter = myValueNotifierCounter.rx();
 ```
 > **IMPORTANT**: O método **rx()** foi adicionado ao [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) usando [Extension Methods](https://dart.dev/guides/language/extension-methods).
 
-Atribuimos um novo valor:
+Atribuímos um novo valor:
 
 ```dart
 
@@ -98,7 +98,7 @@ rxObserver((){
 
 ```
 
-> **IMPORTANT**: É realmente necessário que os **computed** sejam **Getters** e não atribuições. O reação acontecerá quando qualquer um dos **RxNotifier** modificar o valor.
+> **IMPORTANT**: É realmente necessário que os **computed** sejam **Getters** e não atribuições. A reação acontecerá quando qualquer um dos **RxNotifier** modificar o valor.
 
 ## Usando Getters
 

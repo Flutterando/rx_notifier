@@ -29,7 +29,7 @@ final counter = RxNotifier<int>(0);
 
 ```
 
-or chat an  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) already existing using the **.rx()** method:
+or convert a  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) already existing using the **.rx()** method:
 
 ```dart
 
