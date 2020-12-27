@@ -138,6 +138,40 @@ Widget builder(BuildContext context){
 
 ```
 
+## RxMixin for StatelessWidget
+
+**RxMixin** exists to make StatelessWidget reactively transparently.
+Just add the mixin in a StatelessWidget and some reactive variable (RxNotifie) in the builder.
+
+```dart
+class CounterWidget extends StatelessWidget with RxMixin {
+  final RxBUilder<int> counter;
+
+  CounterWidget({Key? key, required this.counter}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text('${counter.value}');
+  }
+}
+```
+
+**RxMixin** also accepts filters. Just override the **filter()** method, returning true or false:
+
+```dart
+class CounterWidget extends StatelessWidget with RxMixin {
+  final RxBUilder<int> counter;
+
+  @override
+  bool filter() => counter.value != 3;
+
+  CounterWidget({Key? key, required this.counter}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text('${counter.value}');
+  }
+}
+```
+
 ## Empower more the ValueNotifier
 
 The [functional_listener](https://pub.dev/packages/functional_listener) add map, where, listen, debounce, combineLatest and several other functions for  ValueNotifier.
