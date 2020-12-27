@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
@@ -59,12 +60,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            RxBuilder(builder: (_) {
-              return Text(
-                '$counter',
-                style: Theme.of(context).textTheme.headline4,
-              );
-            }),
+            RxBuilder(
+              filter: () => counter != 5,
+              builder: (BuildContext context) {
+                return Text('$counter');
+              },
+            ),
+            CounterWidget(
+              counter: _counter,
+            ),
           ],
         ),
       ),
@@ -74,5 +78,18 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class CounterWidget extends StatelessWidget with RxMixin {
+  final ValueListenable<int> counter;
+
+  @override
+  bool filter() => counter.value != 3;
+
+  CounterWidget({Key? key, required this.counter}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text('${counter.value}');
   }
 }
