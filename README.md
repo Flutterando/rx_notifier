@@ -192,7 +192,7 @@ The RxFuture is the reactive wrapper around a Future. You can use it to show the
 
 **RxStream**
 
-Stream<T> stream: The stream that is tracked for status and value changes.
+The stream that is tracked for status and value changes.
 T initialValue: The starting value of the stream.
 
 
