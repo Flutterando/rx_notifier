@@ -1,19 +1,25 @@
 library value_notifier_extension;
 
+import 'dart:async';
+import 'dart:collection';
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+export 'extensions/rx_extensions.dart';
 
 part 'rx_mixin.dart';
+part 'collections/rx_list.dart';
+part 'collections/rx_map.dart';
+part 'collections/rx_set.dart';
+part 'async/rx_future.dart';
+part 'async/rx_stream.dart';
 
 final _rxMainContext = _RxContext();
 
 class RxNotifier<T> = ValueNotifier<T> with _Transparent<T>;
 
 typedef RxDisposer = void Function();
-
-extension ValueNotifierParse<T> on ValueListenable<T> {
-  RxNotifier<T> get rx => RxNotifier<T>(value);
-}
 
 mixin _Transparent<T> on ValueListenable<T> {
   @override

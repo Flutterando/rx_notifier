@@ -19,7 +19,7 @@ void main() {
     expect(list, equals([0, 1, 2, 3, 4, 5]));
   });
   test('convert ValueListenable to Rx', () {
-    final c = ValueNotifier(0).rx;
+    final c = ValueNotifier(0).asRx();
     final list = <int>[];
     rxObserver(() {
       list.add(c.value);
@@ -33,7 +33,7 @@ void main() {
     expect(list, equals([0, 1, 2, 3, 4, 5]));
   });
   test('filter rx', () {
-    final c = ValueNotifier(0).rx;
+    final c = ValueNotifier(0).asRx();
     final list = <int>[];
     rxObserver(() {
       list.add(c.value);
@@ -49,7 +49,7 @@ void main() {
 
   test('computed values', () {
     final a = RxNotifier(0);
-    final b = ValueNotifier(0).rx;
+    final b = ValueNotifier(0).asRx();
     final listA = <int>[];
     final listB = <int>[];
     rxObserver(() {
