@@ -33,7 +33,7 @@ or convert a  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNo
 
 ```dart
 
-final counter = myValueNotifierCounter.rx();
+final counter = myValueNotifierCounter.asRx();
 
 ```
 > **IMPORTANT**: The **rx()** method has been added to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) using [Extension Methods](https://dart.dev/guides/language/extension-methods).
@@ -68,7 +68,7 @@ Or we listen in the Widget tree using **RxBuilder**:
 
 ```dart
 
-Widget builder(BuildContext context){
+Widget build(BuildContext context){
     return RxBuilder(
         builder: (_) => Text('${counter.value}'),
     );
@@ -129,7 +129,7 @@ Both **rxObserver** and **RxBuilder** have a property filter **filter** which is
 
 ```dart
 
-Widget builder(BuildContext context){
+Widget build(BuildContext context){
     return RxBuilder(
         filter: () => counter.value < 10,
         builder: (_) => Text('${counter.value}'),
@@ -145,7 +145,7 @@ Just add the mixin in a StatelessWidget and some reactive variable (RxNotifie) i
 
 ```dart
 class CounterWidget extends StatelessWidget with RxMixin {
-  final RxBUilder<int> counter;
+  final RxBuilder<int> counter;
 
   CounterWidget({Key? key, required this.counter}) : super(key: key);
   @override
@@ -171,6 +171,30 @@ class CounterWidget extends StatelessWidget with RxMixin {
   }
 }
 ```
+
+## Collections and Asyncs
+
+**RxList**
+
+An RxList gives you a deeper level of observability on a list of values. It tracks when items are added, removed or modified and notifies the observers. Use an RxList when a change in the list matters.
+
+**RxMap**
+
+An RxMap gives you a deeper level of observability on a map of values. It tracks when keys are added, removed or modified and notifies the observers. Use an RxMap when a change in the map matters.
+
+**RxSet**
+
+An RxSet gives you a deeper level of observability on a set of values. It tracks when values are added, removed or modified and notifies the observers. Use an RxSet when a change in the set matters.
+
+**RxFuture**
+
+The RxFuture is the reactive wrapper around a Future. You can use it to show the UI under various states of a Future, from pending to fulfilled or rejected. The status, result and error fields of an RxFuture are observable and can be consumed on the UI.
+
+**RxStream**
+
+Stream<T> stream: The stream that is tracked for status and value changes.
+T initialValue: The starting value of the stream.
+
 
 ## Empower more the ValueNotifier
 

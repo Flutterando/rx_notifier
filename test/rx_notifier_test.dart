@@ -4,6 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
 void main() {
+  test('concat operator extension', () {
+    final rx1 = RxNotifier(0);
+    final rx2 = RxNotifier(0);
+    Listenable listenables = rx1 + rx2;
+    final list = [];
+    listenables.addListener(() {
+      list.add(rx1.value);
+    });
+    rx1.value = 1;
+    rx2.value = 2;
+    expect(list, equals([1, 1]));
+  });
+
   test('should dispach rx value', () {
     final c = RxNotifier<int>(0);
     final list = <int>[];

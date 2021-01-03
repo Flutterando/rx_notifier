@@ -81,7 +81,7 @@ class RxList<T> extends ChangeNotifier with ListMixin<T> {
     notifyListeners();
   }
 
-  bool remove(Object? value) {
+  bool remove(covariant T value) {
     final removed = _list.remove(value);
     if (removed) {
       notifyListeners();

@@ -10,7 +10,7 @@ class RxStream<T> extends Stream<T> {
   final RxNotifier<StreamStatus> _status =
       RxNotifier<StreamStatus>(StreamStatus.waiting);
 
-  final RxNotifier<T?> _result = RxNotifier<T?>(null);
+  late final RxNotifier<T?> _result;
   T? get data => _result.value;
   StreamStatus get status => _status.value;
 
@@ -19,7 +19,8 @@ class RxStream<T> extends Stream<T> {
 
   late final Stream<T> _stream;
 
-  RxStream._(Stream<T> stream) {
+  RxStream._(Stream<T> stream, {T? initialValue}) {
+    _result = RxNotifier<T?>(initialValue);
     _stream = stream;
     _sub = _stream.listen((value) {
       _status.value = StreamStatus.active;

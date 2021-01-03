@@ -2,6 +2,11 @@ import 'package:flutter/foundation.dart';
 
 import '../rx_notifier.dart';
 
+extension ListenableMergeExtension on Listenable {
+  Listenable operator +(Listenable listenable) =>
+      Listenable.merge([this, listenable]);
+}
+
 extension ValueNotifierParse<T> on ValueListenable<T> {
   RxNotifier<T> asRx() => RxNotifier<T>(value);
 }
