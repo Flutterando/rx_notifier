@@ -1,11 +1,13 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/jacobmoura/fvm/versions/master
 FLUTTER_APPLICATION_PATH=/Users/jacobmoura/Projects/rx_notifier/example
+FLUTTER_TARGET=/Users/jacobmoura/Projects/rx_notifier/example/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 EXCLUDED_ARCHS=arm64
+DART_DEFINES=flutter.inspector.structuredErrors%3Dtrue
 DART_OBFUSCATION=false
-TRACK_WIDGET_CREATION=false
+TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=.packages
+PACKAGE_CONFIG=/Users/jacobmoura/Projects/rx_notifier/example/.dart_tool/package_config.json
