@@ -7,8 +7,7 @@ mixin RxMixin on StatelessWidget {
   StatelessElement createElement() => _StatelessMixInElement(this);
 }
 
-class _StatelessMixInElement<W extends RxMixin> extends StatelessElement
-    with _NotifierElement {
+class _StatelessMixInElement<W extends RxMixin> extends StatelessElement with _NotifierElement {
   _StatelessMixInElement(
     W widget,
   ) : super(widget);
@@ -47,13 +46,11 @@ mixin _NotifierElement on ComponentElement {
 
   @override
   void update(Widget newWidget) {
-    print('update');
     super.update(newWidget);
   }
 
   @override
   void unmount() {
-    print('unmount');
     listenable?.removeListener(invalidate);
     super.unmount();
   }
