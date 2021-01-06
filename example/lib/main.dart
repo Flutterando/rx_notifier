@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
             RxBuilder(
               filter: () => counter != 5,
               builder: (BuildContext context) {
-                return Text('$counter');
+                return Text('counter');
               },
             ),
             CounterWidget(

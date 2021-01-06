@@ -38,17 +38,19 @@ class _RxContext {
     _listOfListenable.add({});
   }
 
-  Listenable? untrack() {
+  Listenable? untrack([StackTrace? stackTrace]) {
     isTracking = false;
     final listenables = _listOfListenable.last;
     _listOfListenable.removeLast();
     if (listenables.isNotEmpty) {
-      final listenable = listenables.length == 1
-          ? listenables.first
-          : Listenable.merge(listenables.toList());
+      final listenable = listenables.length == 1 ? listenables.first : Listenable.merge(listenables.toList());
       return listenable;
     }
-    print('--- No Rx variables in that space.');
+    FlutterError.reportError(FlutterErrorDetails(
+      library: 'rx_notifier',
+      exception: Exception('No Rx variables in that space.'),
+      // stack: stackTrace,
+    ));
     return null;
   }
 
@@ -61,7 +63,7 @@ class _RxContext {
 RxDisposer rxObserver(void Function() fn, {bool Function()? filter}) {
   _rxMainContext.track();
   fn();
-  final listenable = _rxMainContext.untrack();
+  final listenable = _rxMainContext.untrack(StackTrace.current);
   void Function() dispach = () {
     if (filter?.call() ?? true) {
       fn();
@@ -74,6 +76,8 @@ RxDisposer rxObserver(void Function() fn, {bool Function()? filter}) {
     listenable?.removeListener(dispach);
   };
 }
+
+StackTrace _stackTrace = StackTrace.empty;
 
 class RxBuilder extends StatelessWidget with RxMixin {
   final Widget Function(BuildContext context) builder;

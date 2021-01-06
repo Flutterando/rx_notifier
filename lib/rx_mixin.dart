@@ -38,7 +38,7 @@ mixin _NotifierElement on ComponentElement {
     _rxMainContext.track();
     child = super.build();
 
-    listenable = _rxMainContext.untrack();
+    listenable = _rxMainContext.untrack(_stackTrace);
     listenable?.addListener(invalidate);
 
     return child;
