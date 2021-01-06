@@ -2,6 +2,7 @@ library value_notifier_extension;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -46,11 +47,14 @@ class _RxContext {
       final listenable = listenables.length == 1 ? listenables.first : Listenable.merge(listenables.toList());
       return listenable;
     }
-    FlutterError.reportError(FlutterErrorDetails(
-      library: 'rx_notifier',
-      exception: Exception('No Rx variables in that space.'),
-      // stack: stackTrace,
-    ));
+
+    final stackTraceString = stackTrace == null ? '' : _stackTrace.toString();
+    final stackFrame = LineSplitter.split(stackTraceString).skip(1).firstWhere(
+          (frame) => !frame.contains('new RxBuilder') && !frame.contains('rxObserver'),
+          orElse: () => '',
+        );
+
+    debugPrintStack(stackTrace: StackTrace.fromString(stackFrame), label: '\u001b[31m' + 'No Rx variables in that space.');
     return null;
   }
 
@@ -61,9 +65,10 @@ class _RxContext {
 }
 
 RxDisposer rxObserver(void Function() fn, {bool Function()? filter}) {
+  _stackTrace = StackTrace.current;
   _rxMainContext.track();
   fn();
-  final listenable = _rxMainContext.untrack(StackTrace.current);
+  final listenable = _rxMainContext.untrack(_stackTrace);
   void Function() dispach = () {
     if (filter?.call() ?? true) {
       fn();
@@ -89,6 +94,7 @@ class RxBuilder extends StatelessWidget with RxMixin {
     bool Function()? filter,
   }) : super(key: key) {
     _filter = filter;
+    _stackTrace = StackTrace.current;
   }
 
   @override

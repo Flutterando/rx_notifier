@@ -48,6 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    rxObserver(() {
+      print(counter);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
             RxBuilder(
               filter: () => counter != 5,
               builder: (BuildContext context) {
-                return Text('counter');
+                return Text('$counter');
               },
             ),
             CounterWidget(
