@@ -63,6 +63,7 @@ disposer();
 
 ```
 
+
 Or we listen in the Widget tree using **RxBuilder**:
 
 
@@ -73,6 +74,21 @@ Widget build(BuildContext context){
         builder: (_) => Text('${counter.value}'),
     );
 }
+
+```
+
+Todas os valores declarados no escopo de **fn()** são observáveis e podem gerar um valor que é escutado na propriedade **effect**:
+
+```dart
+
+RxDisposer disposer = rxObserver<String>((){
+    return '${name.value} + ${lastName.value}';
+}, effect: (String fullName){
+  print(fullName);
+});
+
+
+disposer();
 
 ```
 

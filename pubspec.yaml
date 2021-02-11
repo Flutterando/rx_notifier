@@ -1,6 +1,6 @@
 name: rx_notifier
 description: Extension to ValueNotifier by transparently applying functional reactive programming (TFRP)
-version: 1.0.0-nullsafety.2
+version: 1.0.0-nullsafety.3
 homepage: https://github.com/Flutterando/rx_notifier
 
 environment:

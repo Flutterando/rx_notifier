@@ -64,14 +64,15 @@ class _RxContext {
   }
 }
 
-RxDisposer rxObserver(void Function() fn, {bool Function()? filter}) {
+RxDisposer rxObserver<T>(T? Function() fn, {bool Function()? filter, void Function(T? value)? effect}) {
   _stackTrace = StackTrace.current;
   _rxMainContext.track();
   fn();
   final listenable = _rxMainContext.untrack(_stackTrace);
   void Function() dispach = () {
     if (filter?.call() ?? true) {
-      fn();
+      final value = fn();
+      effect?.call(value);
     }
   };
 
