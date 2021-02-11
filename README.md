@@ -76,8 +76,7 @@ Widget build(BuildContext context){
 }
 
 ```
-
-Todas os valores declarados no escopo de **fn()** são observáveis e podem gerar um valor que é escutado na propriedade **effect**:
+All declared values in the current scope **fn()** are observables and can generate a value that is listened in property **effect**.
 
 ```dart
 
