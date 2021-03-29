@@ -204,6 +204,13 @@ An RxSet gives you a deeper level of observability on a set of values. It tracks
 **RxFuture**
 
 The RxFuture is the reactive wrapper around a Future. You can use it to show the UI under various states of a Future, from pending to fulfilled or rejected. The status, result and error fields of an RxFuture are observable and can be consumed on the UI.
+You can add a new Future using **.value**
+```dart
+final rxFuture = RxFuture.of(myFuture);
+...
+
+rxFuture.value = newFuture;
+```
 
 **RxStream**
 

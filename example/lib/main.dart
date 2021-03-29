@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
+import 'home_page.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: DefaultTextStyle(style: TextStyle(fontSize: 50), child: HomePage()),
     );
   }
 }

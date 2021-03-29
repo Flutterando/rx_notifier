@@ -1,23 +1,48 @@
 part of '../rx_notifier.dart';
 
-enum FutureStatus { pending, rejected, fulfilled }
+enum FutureStatus { pending, rejected, fulfilled, none }
 
 class RxFuture<T> implements Future<T> {
-  late final Future<T> _future;
-  final RxNotifier<FutureStatus> _status =
-      RxNotifier<FutureStatus>(FutureStatus.pending);
+  late Future<T> _future;
+  bool _isStartedFuture = false;
+
+  Future<T> get value => _future;
+
+  set value(Future<T> value) {
+    _future = value;
+    _isStartedFuture = false;
+    _status.value = FutureStatus.pending;
+  }
+
+  final RxNotifier<FutureStatus> _status = RxNotifier<FutureStatus>(FutureStatus.pending);
 
   final RxNotifier<T?> _result = RxNotifier<T?>(null);
-  FutureStatus get status => _status.value;
+  FutureStatus get status {
+    _startedFuture();
+    return _status.value;
+  }
+
+  void _startedFuture() {
+    if (!_isStartedFuture) {
+      _isStartedFuture = true;
+      this.then((_) {});
+    }
+  }
 
   final RxNotifier _error = RxNotifier(null);
-  get error => _error.value;
+  get error {
+    _startedFuture();
+    return _error.value;
+  }
 
   RxFuture._(Future<T> future) : _future = future;
 
   static RxFuture<T> of<T>(Future<T> future) => RxFuture._(future);
 
-  T? get data => status == FutureStatus.fulfilled ? _result.value : null;
+  T? get data {
+    _startedFuture();
+    return status == FutureStatus.fulfilled ? _result.value : null;
+  }
 
   @override
   Stream<T> asStream() {
@@ -25,14 +50,14 @@ class RxFuture<T> implements Future<T> {
   }
 
   @override
-  Future<R> then<R>(FutureOr<R> Function(T value) onValue,
-      {Function? onError}) {
+  Future<R> then<R>(FutureOr<R> Function(T value) onValue, {Function? onError}) {
     return RxFuture<R>._(_future.then((T value) {
-      _status.value = FutureStatus.fulfilled;
       _result.value = value;
+      _status.value = FutureStatus.fulfilled;
       return onValue(value);
     }, onError: (error) {
       _error.value = error;
+      _status.value = FutureStatus.rejected;
       onError?.call(error == null ? null : [error]);
     }));
   }
