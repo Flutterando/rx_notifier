@@ -16,8 +16,34 @@ main() {
     list.add('novo 2');
     await Future.delayed(Duration(milliseconds: 800));
   });
-  test('rx containe', () async {
+  test('rx contains', () async {
     RxList list = RxList(['jacob', 'sara']);
-    print(list.contains('jacob'));
+    assert(list.contains('jacob'));
+  });
+
+  test('rx list observer effect', () async {
+    final list = RxNotifier(RxList(['jacob', 'sara']));
+    bool effectHappened = false;
+    rxObserver(() => list.value, effect: (val) {
+      effectHappened = list.value.contains('coco');
+    });
+    list.value.add('coco');
+    assert(effectHappened);
+  });
+
+  test('replace rxlist and keep reactivity', () async {
+    final list = RxNotifier(RxList(['jacob', 'sara']));
+    bool effectHappened = false;
+    bool ignoreFirstReaction = true;
+    rxObserver(() => list.value, effect: (val) {
+      if (ignoreFirstReaction) {
+        ignoreFirstReaction = false;
+        return;
+      }
+      effectHappened = list.value.contains('coco');
+    });
+    list.value = RxList();
+    list.value.add('coco');
+    assert(effectHappened);
   });
 }
