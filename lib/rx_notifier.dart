@@ -26,6 +26,9 @@ mixin _Transparent<T> on ValueListenable<T> {
   @override
   get value {
     _rxMainContext.reportRead(this);
+    if (super.value is Listenable) {
+      _rxMainContext.reportRead(super.value as Listenable);
+    }
     return super.value;
   }
 }
