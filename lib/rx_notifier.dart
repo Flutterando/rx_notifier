@@ -72,17 +72,17 @@ RxDisposer rxObserver<T>(T? Function() fn, {bool Function()? filter, void Functi
   _rxMainContext.track();
   fn();
   final listenable = _rxMainContext.untrack(_stackTrace);
-  void Function() dispach = () {
+  void Function() dispatch = () {
     if (filter?.call() ?? true) {
       final value = fn();
       effect?.call(value);
     }
   };
 
-  listenable?.addListener(dispach);
+  listenable?.addListener(dispatch);
 
   return () {
-    listenable?.removeListener(dispach);
+    listenable?.removeListener(dispatch);
   };
 }
 
