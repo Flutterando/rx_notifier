@@ -22,7 +22,7 @@ void main() {
         ]));
   });
 
-  test('should dispach rx value', () {
+  test('should dispatch rx value', () {
     final c = RxNotifier<int>(0);
     final list = <int>[];
     rxObserver(() {
@@ -46,7 +46,7 @@ void main() {
         ]));
   });
 
-  test('should dispach rx value and listen effect', () {
+  test('should dispatch rx value and listen effect', () {
     final c = RxNotifier<int>(0);
     final list = <int>[];
     rxObserver<int>(() => c.value, effect: (value) {
