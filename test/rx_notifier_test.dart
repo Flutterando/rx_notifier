@@ -14,12 +14,7 @@ void main() {
     });
     rx1.value = 1;
     rx2.value = 2;
-    expect(
-        list,
-        equals([
-          1,
-          1
-        ]));
+    expect(list, equals([1, 1]));
   });
 
   test('should dispatch rx value', () {
@@ -34,16 +29,7 @@ void main() {
     c.value = 4;
     c.value = 5;
 
-    expect(
-        list,
-        equals([
-          0,
-          1,
-          2,
-          3,
-          4,
-          5
-        ]));
+    expect(list, equals([0, 1, 2, 3, 4, 5]));
   });
 
   test('should dispatch rx value and listen effect', () {
@@ -57,15 +43,7 @@ void main() {
     c.value = 3;
     c.value = 4;
     c.value = 5;
-    expect(
-        list,
-        equals([
-          1,
-          2,
-          3,
-          4,
-          5
-        ]));
+    expect(list, equals([1, 2, 3, 4, 5]));
   });
   test('convert ValueListenable to Rx', () {
     final c = ValueNotifier(0).asRx();
@@ -79,16 +57,7 @@ void main() {
     c.value = 4;
     c.value = 5;
 
-    expect(
-        list,
-        equals([
-          0,
-          1,
-          2,
-          3,
-          4,
-          5
-        ]));
+    expect(list, equals([0, 1, 2, 3, 4, 5]));
   });
   test('filter rx', () {
     final c = ValueNotifier(0).asRx();
@@ -102,15 +71,7 @@ void main() {
     c.value = 4;
     c.value = 5;
 
-    expect(
-        list,
-        equals([
-          0,
-          1,
-          2,
-          4,
-          5
-        ]));
+    expect(list, equals([0, 1, 2, 4, 5]));
   });
 
   test('computed values', () {
@@ -127,21 +88,7 @@ void main() {
     b.value = 2;
     b.value = 3;
 
-    expect(
-        listA,
-        equals([
-          0,
-          1,
-          1,
-          1
-        ]));
-    expect(
-        listB,
-        equals([
-          0,
-          0,
-          2,
-          3
-        ]));
+    expect(listA, equals([0, 1, 1, 1]));
+    expect(listB, equals([0, 0, 2, 3]));
   });
 }

@@ -14,7 +14,8 @@ class RxFuture<T> implements Future<T> {
     _status.value = FutureStatus.pending;
   }
 
-  final RxNotifier<FutureStatus> _status = RxNotifier<FutureStatus>(FutureStatus.pending);
+  final RxNotifier<FutureStatus> _status =
+      RxNotifier<FutureStatus>(FutureStatus.pending);
 
   final RxNotifier<T?> _result = RxNotifier<T?>(null);
   FutureStatus get status {
@@ -30,7 +31,7 @@ class RxFuture<T> implements Future<T> {
   }
 
   final RxNotifier _error = RxNotifier(null);
-  get error {
+  dynamic get error {
     _startedFuture();
     return _error.value;
   }
@@ -50,16 +51,24 @@ class RxFuture<T> implements Future<T> {
   }
 
   @override
-  Future<R> then<R>(FutureOr<R> Function(T value) onValue, {Function? onError}) {
-    return RxFuture<R>._(_future.then((T value) {
-      _result.value = value;
-      _status.value = FutureStatus.fulfilled;
-      return onValue(value);
-    }, onError: (error) {
-      _error.value = error;
-      _status.value = FutureStatus.rejected;
-      onError?.call(error == null ? null : [error]);
-    }));
+  Future<R> then<R>(
+    FutureOr<R> Function(T value) onValue, {
+    Function? onError,
+  }) {
+    return RxFuture<R>._(
+      _future.then(
+        (T value) {
+          _result.value = value;
+          _status.value = FutureStatus.fulfilled;
+          return onValue(value);
+        },
+        onError: (error) {
+          _error.value = error;
+          _status.value = FutureStatus.rejected;
+          onError?.call(error == null ? null : [error]);
+        },
+      ),
+    );
   }
 
   @override
@@ -67,7 +76,8 @@ class RxFuture<T> implements Future<T> {
     return RxFuture<T>._(_future.whenComplete(action));
   }
 
-  Future<T> catchError(Function onError, {bool test(Object error)?}) {
+  @override
+  Future<T> catchError(Function onError, {bool Function(Object error)? test}) {
     return RxFuture<T>._(_future.catchError(onError, test: test));
   }
 

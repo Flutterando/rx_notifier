@@ -26,7 +26,6 @@ To start, instantiate an RxNofifier.
 
 ```dart
 final counter = RxNotifier<int>(0);
-
 ```
 
 or convert a  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) already existing using the **.rx()** method:
@@ -38,57 +37,27 @@ final counter = myValueNotifierCounter.asRx();
 ```
 > **IMPORTANT**: The **rx()** method has been added to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) using [Extension Methods](https://dart.dev/guides/language/extension-methods).
 
-We assign a new value:
+
+And listen the changes using **rxObserver**:
 
 ```dart
-
-final counter = RxNotifier<int>(0);
-
-increment(){
-    counter.value++;
-}
-
-```
-
-And we hear the changes using **rxObserver**:
-
-```dart
-
 RxDisposer disposer = rxObserver((){
     print(counter.value);
 });
 
-
 disposer();
-
 ```
 
-
-Or we listen in the Widget tree using **RxBuilder**:
-
-
-```dart
-
-Widget build(BuildContext context){
-    return RxBuilder(
-        builder: (_) => Text('${counter.value}'),
-    );
-}
-
-```
 All declared values in the current scope **fn()** are observables and can generate a value that is listened in property **effect**.
 
 ```dart
-
 RxDisposer disposer = rxObserver<String>((){
     return '${name.value} + ${lastName.value}';
 }, effect: (String fullName){
   print(fullName);
 });
 
-
 disposer();
-
 ```
 
 This is the transparent use of individual reactivity, but we can also combine **RxNotifier Objects** producing new value. This technique is called **Computed**
@@ -98,7 +67,6 @@ This is the transparent use of individual reactivity, but we can also combine **
 To combine two or more **RxNotifier Objects** we need to use a **getter** returning a new combined value:
 
 ```dart
-
 final num1 = RxNotifier<int>(1);
 final num2 = RxNotifier<int>(2);
 
@@ -109,8 +77,6 @@ String get result => 'num1: ${num1.value} + num2: ${num2.value} = ${num1.value +
 rxObserver((){
     print(result); // print´s "num1: 1 + num2: 2 = 3
 });
-
-
 ```
 
 > **IMPORTANT**: It is really necessary that **computed** are **Getters** and not assignments. The reaction will happen when any of the **RxNotifier** changes the value.
@@ -140,52 +106,69 @@ rxObserver((){
 
 ## Filters
 
-Both **rxObserver** and **RxBuilder** have a property filter **filter** which is a function that returns a **bool**. Use this to define when (or not) to reflect changes:
+All Rx listeners have a property filter **filter** which is a function that returns a **bool**. Use this to define when (or not) to reflect changes:
+
+```dart
+RxDisposer disposer = rxObserver<String>((){
+    return '${name.value} + ${lastName.value}';
+}, filter: (fullName) => fullName.isNotEmpty);
+
+disposer();
+```
+
+
+
+## Flutter and RxNotifier
+
+RxNotifeir has tools that help with state management and propagation for the Widget.
+
+1. Add the RxRoot Widget to the root of the app:
+
+```dart
+void main(){
+  runApp(RxRoot(child: AppWidget()));
+}
+```
+
+2. Now just use the `context.select` method passing the RxNotifier objects:
 
 ```dart
 
+final counter = RxNotifier(0);
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final value = context.select(() => counter.value);
+
+    return Scaffold(
+      body: Center(
+        child: Text(
+          '${home.count}',
+           style: TextStyle(fontSize: 23),
+        )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => counter.count++,
+      ),
+    );
+  }
+}
+```
+
+## Flutter and RxNotifier: OPTIONAL RxBuilder
+A builder for managing state in a scoped way is also available:
+
+```dart
 Widget build(BuildContext context){
     return RxBuilder(
-        filter: () => counter.value < 10,
         builder: (_) => Text('${counter.value}'),
     );
 }
-
 ```
 
-## RxMixin for StatelessWidget
-
-**RxMixin** exists to make StatelessWidget reactively transparently.
-Just add the mixin in a StatelessWidget and some reactive variable (RxNotifie) in the builder.
-
-```dart
-class CounterWidget extends StatelessWidget with RxMixin {
-  final RxBuilder<int> counter;
-
-  CounterWidget({Key? key, required this.counter}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Text('${counter.value}');
-  }
-}
-```
-
-**RxMixin** also accepts filters. Just override the **filter()** method, returning true or false:
-
-```dart
-class CounterWidget extends StatelessWidget with RxMixin {
-  final RxBUilder<int> counter;
-
-  @override
-  bool filter() => counter.value != 3;
-
-  CounterWidget({Key? key, required this.counter}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Text('${counter.value}');
-  }
-}
-```
+> **IMPORTANT**: Both the `context.select` method and the builder have the `filter` property.
 
 ## Collections and Asyncs
 

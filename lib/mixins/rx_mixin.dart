@@ -1,13 +1,17 @@
-part of 'rx_notifier.dart';
+part of '../rx_notifier.dart';
 
+/// Deprecated
+@Deprecated('Use RxRoot Widget with context.select')
 mixin RxMixin on StatelessWidget {
+  /// Deprecated
   bool filter() => true;
 
   @override
   StatelessElement createElement() => _StatelessMixInElement(this);
 }
 
-class _StatelessMixInElement<W extends RxMixin> extends StatelessElement with _NotifierElement {
+class _StatelessMixInElement<W extends RxMixin> extends StatelessElement
+    with _NotifierElement {
   _StatelessMixInElement(
     W widget,
   ) : super(widget);
@@ -20,10 +24,6 @@ class _StatelessMixInElement<W extends RxMixin> extends StatelessElement with _N
 
 mixin _NotifierElement on ComponentElement {
   Listenable? listenable;
-  @override
-  void mount(Element? parent, newSlot) {
-    super.mount(parent, newSlot);
-  }
 
   void invalidate() {
     if ((widget as RxMixin).filter()) {
@@ -38,15 +38,14 @@ mixin _NotifierElement on ComponentElement {
     _rxMainContext.track();
     child = super.build();
 
-    listenable = _rxMainContext.untrack(_stackTrace);
+    final listenables = _rxMainContext.untrack(_stackTrace);
+    if (listenables.isNotEmpty) {
+      listenable = Listenable.merge(listenables.toList());
+    }
+
     listenable?.addListener(invalidate);
 
     return child;
-  }
-
-  @override
-  void update(Widget newWidget) {
-    super.update(newWidget);
   }
 
   @override

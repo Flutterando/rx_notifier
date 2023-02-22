@@ -5,60 +5,81 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-export 'extensions/rx_extensions.dart';
 
-part 'rx_mixin.dart';
+part 'async/rx_future.dart';
+part 'async/rx_stream.dart';
 part 'collections/rx_list.dart';
 part 'collections/rx_map.dart';
 part 'collections/rx_set.dart';
-part 'async/rx_future.dart';
-part 'async/rx_stream.dart';
+part 'extensions/rx_extensions.dart';
+part 'functions/functions.dart';
+part 'mixins/rx_mixin.dart';
+part 'widgets/rx_builder.dart';
+part 'widgets/rx_root.dart';
 
 final _rxMainContext = _RxContext();
 
-class RxNotifier<T> = ValueNotifier<T> with _Transparent<T>;
-
-typedef RxDisposer = void Function();
-
-mixin _Transparent<T> on ValueListenable<T> {
+/// Extension to ValueNotifier by transparently applying
+/// functional reactive programming (TFRP).
+class RxNotifier<T> extends ValueNotifier<T> {
   @override
-  get value {
+  T get value {
     _rxMainContext.reportRead(this);
-    if (super.value is Listenable) {
+    if (_value is Listenable) {
       _rxMainContext.reportRead(super.value as Listenable);
     }
-    return super.value;
+    return _value;
+  }
+
+  T _value;
+
+  ///  Extension to ValueNotifier by transparently applying
+  /// functional reactive programming (TFRP).
+  RxNotifier(this._value) : super(_value);
+
+  @override
+  set value(T newValue) {
+    _value = newValue;
+    notifyListeners();
   }
 }
 
 class _RxContext {
   bool isTracking = false;
-  List<Set<Listenable>> _listOfListenable = [];
+  final List<Set<Listenable>> _listOfListenable = [];
 
   void track() {
     isTracking = true;
     _listOfListenable.add({});
   }
 
-  Listenable? untrack([StackTrace? stackTrace]) {
+  Set<Listenable> untrack([StackTrace? stackTrace]) {
     isTracking = false;
     final listenables = _listOfListenable.last;
     _listOfListenable.removeLast();
     if (listenables.isNotEmpty) {
-      final listenable = listenables.length == 1 ? listenables.first : Listenable.merge(listenables.toList());
-      return listenable;
+      return listenables;
     }
 
     final stackTraceString = stackTrace == null ? '' : _stackTrace.toString();
-    final stackFrame = LineSplitter.split(stackTraceString).skip(1).firstWhere(
-          (frame) => !frame.contains('new RxBuilder') && !frame.contains('rxObserver'),
+    final stackFrame = LineSplitter //
+            .split(stackTraceString)
+        .skip(1)
+        .firstWhere(
+          (frame) =>
+              !frame.contains('new RxBuilder') && //
+              !frame.contains('rxObserver'),
           orElse: () => '',
         );
 
-    debugPrintStack(stackTrace: StackTrace.fromString(stackFrame), label: '\u001b[31m' + 'No Rx variables in that space.');
-    return null;
+    debugPrintStack(
+      stackTrace: StackTrace.fromString(stackFrame),
+      label: '\u001b[31m' 'No Rx variables in that space.',
+    );
+    return {};
   }
 
   void reportRead(Listenable listenable) {
@@ -67,45 +88,4 @@ class _RxContext {
   }
 }
 
-RxDisposer rxObserver<T>(T? Function() fn, {bool Function()? filter, void Function(T? value)? effect}) {
-  _stackTrace = StackTrace.current;
-  _rxMainContext.track();
-  fn();
-  final listenable = _rxMainContext.untrack(_stackTrace);
-  void Function() dispatch = () {
-    if (filter?.call() ?? true) {
-      final value = fn();
-      effect?.call(value);
-    }
-  };
-
-  listenable?.addListener(dispatch);
-
-  return () {
-    listenable?.removeListener(dispatch);
-  };
-}
-
 StackTrace _stackTrace = StackTrace.empty;
-
-class RxBuilder extends StatelessWidget with RxMixin {
-  final Widget Function(BuildContext context) builder;
-  late final bool Function()? _filter;
-
-  RxBuilder({
-    Key? key,
-    required this.builder,
-    bool Function()? filter,
-  }) : super(key: key) {
-    _filter = filter;
-    _stackTrace = StackTrace.current;
-  }
-
-  @override
-  bool filter() => _filter?.call() ?? true;
-
-  @override
-  Widget build(BuildContext context) {
-    return builder(context);
-  }
-}

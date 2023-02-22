@@ -33,17 +33,15 @@ main() {
 
   test('replace rxlist and keep reactivity', () async {
     final list = RxNotifier(RxList(['jacob', 'sara']));
-    bool effectHappened = false;
     bool ignoreFirstReaction = true;
-    rxObserver(() => list.value, effect: (val) {
+    rxObserver(() => list.value, effect: expectAsync1((val) {
       if (ignoreFirstReaction) {
         ignoreFirstReaction = false;
         return;
       }
-      effectHappened = list.value.contains('coco');
-    });
+      expect(list.value.contains('coco'), isTrue);
+    }));
     list.value = RxList();
     list.value.add('coco');
-    assert(effectHappened);
   });
 }
