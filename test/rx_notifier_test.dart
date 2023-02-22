@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -7,7 +9,7 @@ void main() {
   test('concat operator extension', () {
     final rx1 = RxNotifier(0);
     final rx2 = RxNotifier(0);
-    Listenable listenables = rx1 + rx2;
+    final listenables = rx1 + rx2;
     final list = [];
     listenables.addListener(() {
       list.add(rx1.value);
@@ -35,9 +37,12 @@ void main() {
   test('should dispatch rx value and listen effect', () {
     final c = RxNotifier<int>(0);
     final list = <int>[];
-    rxObserver<int>(() => c.value, effect: (value) {
-      list.add(value!);
-    });
+    rxObserver<int>(
+      () => c.value,
+      effect: (value) {
+        list.add(value!);
+      },
+    );
     c.value = 1;
     c.value = 2;
     c.value = 3;
@@ -62,9 +67,12 @@ void main() {
   test('filter rx', () {
     final c = ValueNotifier(0).asRx();
     final list = <int>[];
-    rxObserver(() {
-      list.add(c.value);
-    }, filter: () => c.value != 3);
+    rxObserver(
+      () {
+        list.add(c.value);
+      },
+      filter: () => c.value != 3,
+    );
     c.value = 1;
     c.value = 2;
     c.value = 3;
@@ -80,7 +88,7 @@ void main() {
     final listA = <int>[];
     final listB = <int>[];
     rxObserver(() {
-      print("A: ${a.value} | B: ${b.value}");
+      log('A: ${a.value} | B: ${b.value}');
       listA.add(a.value);
       listB.add(b.value);
     });
