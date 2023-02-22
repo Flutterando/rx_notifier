@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
+export 'package:flutter/foundation.dart' show ValueListenable;
 export 'package:rx_notifier_annotation/rx_notifier_annotation.dart';
 
 part 'async/rx_future.dart';

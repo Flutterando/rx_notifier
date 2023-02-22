@@ -1,4 +1,3 @@
-
 import 'package:analyzer/dart/element/element.dart';
 
 import 'utils.dart';
@@ -11,7 +10,7 @@ class RxValueField {
 
   String get sourcePublicFieldName => publicName(f);
 
-  String get type => f.type.getDisplayString(withNullability: false);
+  String get type => f.type.getDisplayString(withNullability: true);
 
   String get nameRx => "_${name}Rx";
   String get nameValue => "_${name}Value";

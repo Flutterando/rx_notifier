@@ -6,10 +6,8 @@ part 'example.g.dart';
 @RxStore()
 abstract class _AppStore {
   @RxValue()
-  int count;
+  int count = 0;
 
   @RxValue()
-  String name;
-
-  _AppStore(this.count, this.name);
+  String? name;
 }

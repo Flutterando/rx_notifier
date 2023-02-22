@@ -1,6 +1,6 @@
 name: rx_notifier_generator
 description: Generate RxNotifier getter and setter. Use annotations @store and @rx
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Flutterando/rxnotifier
 
 environment:

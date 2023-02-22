@@ -22,14 +22,14 @@ mixin _AppStoreMixin on _AppStore {
   int get count => _countRx.value;
 
   ///
-  /// GENERATED name(String)
+  /// GENERATED name(String?)
   ///
 
-  late final _nameRx = RxNotifier<String>(super.name);
-  ValueListenable<String> get nameListenable => _nameRx;
+  late final _nameRx = RxNotifier<String?>(super.name);
+  ValueListenable<String?> get nameListenable => _nameRx;
 
   @override
-  set name(String _nameValue) => _nameRx.value = _nameValue;
+  set name(String? _nameValue) => _nameRx.value = _nameValue;
   @override
-  String get name => _nameRx.value;
+  String? get name => _nameRx.value;
 }
