@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
-main() {
+void main() {
   test('status', () async {
     final rxFuture = getCounterFuture(1).asRx();
     final completer = Completer();
-    int number = 0;
+    var number = 0;
     rxObserver(() {
       if (rxFuture.status == FutureStatus.pending) {
         return;
@@ -41,6 +41,6 @@ main() {
 }
 
 Future<int> getCounterFuture(int value) async {
-  await Future.delayed(Duration(milliseconds: 500));
+  await Future.delayed(const Duration(milliseconds: 500));
   return value;
 }

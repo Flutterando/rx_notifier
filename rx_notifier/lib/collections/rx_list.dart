@@ -65,8 +65,8 @@ class RxList<T> extends ChangeNotifier with ListMixin<T> {
   }
 
   @override
-  void replaceRange(int start, int end, Iterable<T> replacement) {
-    _list.replaceRange(start, end, replacement);
+  void replaceRange(int start, int end, Iterable<T> newContents) {
+    _list.replaceRange(start, end, newContents);
     notifyListeners();
   }
 
@@ -77,26 +77,26 @@ class RxList<T> extends ChangeNotifier with ListMixin<T> {
   }
 
   @override
-  void fillRange(int start, int end, [T? fillValue]) {
-    _list.fillRange(start, end, fillValue);
+  void fillRange(int start, int end, [T? fill]) {
+    _list.fillRange(start, end, fill);
     notifyListeners();
   }
 
   @override
-  void add(T item) {
-    _list.add(item);
+  void add(T element) {
+    _list.add(element);
     notifyListeners();
   }
 
   @override
-  void addAll(Iterable<T> list) {
-    _list.addAll(list);
+  void addAll(Iterable<T> iterable) {
+    _list.addAll(iterable);
     notifyListeners();
   }
 
   @override
-  bool remove(covariant T value) {
-    final removed = _list.remove(value);
+  bool remove(covariant T element) {
+    final removed = _list.remove(element);
     if (removed) {
       notifyListeners();
     }
@@ -184,9 +184,9 @@ class RxList<T> extends ChangeNotifier with ListMixin<T> {
   }
 
   @override
-  void forEach(void Function(T) f) {
+  void forEach(void Function(T) action) {
     _rxMainContext.reportRead(this);
-    _list.forEach(f);
+    _list.forEach(action);
   }
 
   @override
