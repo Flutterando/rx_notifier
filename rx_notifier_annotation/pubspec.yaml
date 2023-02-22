@@ -1,0 +1,9 @@
+name: rx_notifier_annotation
+description: Annotation for rx_notifier_generator
+version: 1.0.0
+repository: https://github.com/Flutterando/rx_notifier
+
+environment:
+  sdk: '>=2.12.0 <4.0.0'
+
+

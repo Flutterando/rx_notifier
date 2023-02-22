@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      rx_notifier_generator|rx_notifier_annotation:
+        enabled: true
+
+builders:
+  rx_generator:
+    target: ":rx_generator"
+    import: "package:rx_notifier_generator/rx_notifier_generator.dart"
+    builder_factories: ["rxBuilder"]
+    build_extensions: {".dart": [".g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]

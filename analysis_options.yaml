@@ -1,6 +1,0 @@
-include: package:flutterando_analysis/flutter_package.yaml
-
-linter:
-  rules:
-    cascade_invocations: false
-    use_to_and_as_if_applicable: false
