@@ -1,4 +1,5 @@
 import 'package:example/models/product_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
 import '../stores/app_store.dart';
@@ -9,10 +10,11 @@ class ShopController extends RxController {
 
   ShopController(this.appStore) {
     on(() => [shop.fetchProductsAction], _fetchProductsReducer);
-    on(() => [shop.addProductAction], _addProductReducer);
+    on(() => [shop.addProductAction], addProductReducer);
   }
 
-  void _addProductReducer() {
+  @visibleForTesting
+  void addProductReducer() {
     if (shop.addProductAction != null) {
       shop.cartProducts.add(shop.addProductAction!);
     }

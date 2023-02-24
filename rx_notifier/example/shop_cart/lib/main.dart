@@ -1,19 +1,10 @@
-import 'package:auto_injector/auto_injector.dart';
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
-import 'controllers/shop_controller.dart';
+import 'module.dart';
 import 'pages/cart_page.dart';
 import 'pages/home_page.dart';
 import 'stores/app_store.dart';
-
-final injector = AutoInjector(
-  on: (i) {
-    i.addSingleton(AppStore.new);
-    i.addSingleton(ShopController.new);
-    i.commit();
-  },
-);
 
 void main() {
   final appStore = injector<AppStore>();
