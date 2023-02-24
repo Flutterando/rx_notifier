@@ -5,7 +5,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:equatable/equatable.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -43,12 +43,120 @@ class RxNotifier<T> extends ValueNotifier<T> {
   /// functional reactive programming (TFRP).
   RxNotifier(this._value) : super(_value);
 
+  /// The current value stored in this notifier.
   @override
   set value(T newValue) {
     _value = newValue;
     notifyListeners();
   }
+
+  /// Tear-offs for set value in this notifier.
+  void setValue(T newValue) {
+    _value = newValue;
+    notifyListeners();
+  }
 }
+
+/// Send action
+/// ```dart
+/// final counter = RxNotifier<int>();
+/// final increment = RxAction();
+///
+/// rxObserver(
+///     () => increment.action,
+///     effect: (_) => counter.value++,
+/// );
+///
+/// // dispatch action
+/// increment();
+///
+/// ```
+class RxAction extends ChangeNotifier {
+  /// Track action listener
+  RxVoid get action {
+    _rxMainContext.reportRead(this);
+    return rxVoid;
+  }
+
+  /// dispatch action
+  void call() {
+    notifyListeners();
+  }
+}
+
+/// A standalone control that registers various reducers
+/// to perform actions and modify RxNotifiers;
+/// ```dart
+///
+/// final counter = RxNotifier<int>(0);
+/// final increment = RxAction();
+///
+/// class CounterController extends RxController {
+///   final HomeState state;
+///
+///   CounterController(this.state) {
+///     on(() => [increment], _incrementReducer);
+///   }
+///
+///   void _incrementReducer() {
+///     counter.value++;
+///   }
+/// }
+///
+/// // in widget:
+///
+/// Text('$counter.value'),
+/// ...
+/// onPressed: () => increment();
+/// ```
+abstract class RxController {
+  final _rxDisposers = <RxDisposer>[];
+
+  /// reducer register:
+  /// ```dart
+  /// on(() => [state.increment], _incrementReducer);
+  /// ```
+  void on(
+    List<Object?> Function() rxValues,
+    void Function() reducer, {
+    bool Function()? filter,
+  }) {
+    final rxDisposer = rxObserver<void>(
+      () {
+        for (final value in rxValues()) {
+          _prexec(value);
+        }
+      },
+      effect: (_) => reducer(),
+      filter: filter,
+    );
+    _rxDisposers.add(rxDisposer);
+  }
+
+  void _prexec(Object? object) {
+    if (object is RxAction) {
+      object.action;
+    } else if (object is RxNotifier) {
+      object.value;
+    }
+  }
+
+  /// dispose all registers
+  void dispose() {
+    for (final disposer in _rxDisposers) {
+      disposer();
+      _rxDisposers.clear();
+    }
+  }
+}
+
+/// Void return
+class RxVoid {
+  /// Void return
+  const RxVoid();
+}
+
+const rxVoid = RxVoid();
 
 class _RxContext {
   bool isTracking = false;

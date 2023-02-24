@@ -73,7 +73,7 @@ class _RxRootElement extends InheritedElement {
 
   @override
   void updateDependencies(Element dependent, covariant _Register register) {
-    final registers = getDependencies(dependent) as Set<_Register>? ?? {};
+    final registers = _getRegisters(dependent);
 
     final listener = Listenable.merge(register.listenables.toList());
 
@@ -115,18 +115,23 @@ class _RxRootElement extends InheritedElement {
 
   @override
   void notifyDependent(covariant InheritedWidget oldWidget, Element dependent) {
-    final registers = getDependencies(dependent) as Set<_Register>? ?? {};
+    final registers = _getRegisters(dependent);
     if (registers.contains(currentRegister)) {
       _removeListeners(registers);
-      setDependencies(dependent, <_Register>{});
+      setDependencies(dependent, HashSet<_Register>());
       dependent.didChangeDependencies();
     }
   }
 
-  void _removeListeners(Set<_Register> registers) {
+  void _removeListeners(HashSet<_Register> registers) {
     for (final register in registers) {
       register.mutableCallback.dispose?.call();
     }
+    registers.clear();
+  }
+
+  HashSet<_Register> _getRegisters(Element dependent) {
+    return getDependencies(dependent) as HashSet<_Register>? ?? HashSet<_Register>();
   }
 }
 
@@ -135,7 +140,8 @@ class _MutableCallback {
   void Function()? dispose;
 }
 
-class _Register<T> extends Equatable {
+@immutable
+class _Register<T> {
   final Set<Listenable> listenables;
   final mutableCallback = _MutableCallback();
   final bool Function()? filter;
@@ -146,5 +152,12 @@ class _Register<T> extends Equatable {
   }
 
   @override
-  List<Object?> get props => [listenables];
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    final setEquals = const DeepCollectionEquality().equals;
+    return other is _Register<T> && setEquals(other.listenables, listenables);
+  }
+
+  @override
+  int get hashCode => listenables.hashCode;
 }
