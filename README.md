@@ -40,6 +40,10 @@ In Flutter these layers translate to Atom(`RxNotifier`), Reducer(RxReducer) and 
 Atom represent the reactive state of an application.
 Each atom has its own reactivity.
 
+> **IMPORTANT**: The **RxAction()** is a special `RxNotifier`
+other than a value assignment to notify listeners.
+Just call the `call()` method;
+
 ```dart
 // atoms
 final productsState = <Product>[].asRx();
@@ -59,13 +63,11 @@ final selectedProductState = RxNotifier<Product?>(null);
 final fetchProductsState = RxAction();
 ```
 
-> **IMPORTANT**: The **RxAction()** is a special `RxNotifier`
-other than a value assignment to notify listeners.
-Just call the `call()` method;
+
 
 ## Reducer (RxReducer)
 
-In this architecture we are forced to split state management
+In this architecture you are forced to split state management
 of business rules, which may seem strange at first when seen
 that we are always managing and reducing state in the same layer as `BLoC` and `ChangeNotifier` for example.<br>
 However, dividing state management and business rule execution will help us distribute multiple states to the same widget, and these multiple states will not need to be concatenated beforehand through a `facade` or `proxy`.
