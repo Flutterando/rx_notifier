@@ -5,9 +5,10 @@ This extension aims to transparently apply **functional reactive programming (TF
 
 - [Read the documentation](https://github.com/Flutterando/rx_notifier/tree/master/rx_notifier).
 
-## State Management approach with RxNotifier
+## Implementing the Atomic State.
 
-Inspired by [Recoil](https://recoiljs.org), `RxNotifier` has tools so that the storage and propagation of the state (Reactivity) are the responsibility of the property that will represent the state, being considered in this architecture as an Atom.< br/>
+It is possible to implement [Recoil](https://recoiljs.org) Atoms pattern using `RxNotifier`.
+This pattern consists of the state being an object with its own reactivity.
 
 ![atom](/assets/atom.png)
 
