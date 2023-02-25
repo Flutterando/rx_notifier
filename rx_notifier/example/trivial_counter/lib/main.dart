@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: DefaultTextStyle(style: TextStyle(fontSize: 50), child: CounterPage()),
+      home: DefaultTextStyle(
+          style: TextStyle(fontSize: 50), child: CounterPage()),
     );
   }
 }

@@ -150,7 +150,8 @@ class _RxRootElement extends InheritedElement {
   }
 
   HashSet<_Register> _getRegisters(Element dependent) {
-    return getDependencies(dependent) as HashSet<_Register>? ?? HashSet<_Register>();
+    return getDependencies(dependent) as HashSet<_Register>? ??
+        HashSet<_Register>();
   }
 }
 

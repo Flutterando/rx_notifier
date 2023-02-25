@@ -34,7 +34,9 @@ abstract class _ShopState {
     if (filterText.isEmpty) {
       return products;
     }
-    return products.where((product) => product.title.contains(filterText)).toList();
+    return products
+        .where((product) => product.title.contains(filterText))
+        .toList();
   }
 
   // actions

@@ -1,9 +1,11 @@
-## [2.0.0+3] - 2023-02-22
+## [2.0.0+6] - 2023-02-22
 
 * (Breaking change) - `RxNotifier.value` now accept equal values. <br>
 The ValueNotifier does not propagate if the changed value is the same.
 * Flutter State management with `RxRoot` and `context.select` (Check documentation);
 * (Deprecated) `RxMixin` (Use `RxRoot` or `RxBuilder` instead).
+* Added `RxAction`.
+* Added `RxReducer`.
 * Update documentation.
 * Up Dart version to >=2.17.
 
