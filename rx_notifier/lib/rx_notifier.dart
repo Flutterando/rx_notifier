@@ -84,21 +84,21 @@ class RxAction extends ChangeNotifier {
   }
 }
 
-/// A standalone control that registers various reducers
+/// The layer responsible for making business decisions
 /// to perform actions and modify RxNotifiers;
 /// ```dart
 ///
-/// final counter = RxNotifier<int>(0);
-/// final increment = RxAction();
+/// final counterState = RxNotifier<int>(0);
+/// final incrementState = RxAction();
 ///
-/// class CounterController extends RxController {
+/// class CounterReducer extends RxReducer {
 ///   final HomeState state;
 ///
 ///   CounterController(this.state) {
-///     on(() => [increment], _incrementReducer);
+///     on(() => [counterState], _increment);
 ///   }
 ///
-///   void _incrementReducer() {
+///   void _increment() {
 ///     counter.value++;
 ///   }
 /// }
@@ -109,7 +109,7 @@ class RxAction extends ChangeNotifier {
 /// ...
 /// onPressed: () => increment();
 /// ```
-abstract class RxController {
+abstract class RxReducer {
   final _rxDisposers = <RxDisposer>[];
 
   /// reducer register:

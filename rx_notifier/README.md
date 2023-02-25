@@ -35,7 +35,7 @@ or convert a  [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNo
 final counter = myValueNotifierCounter.asRx();
 
 ```
-> **IMPORTANT**: The **rx()** method has been added to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) using [Extension Methods](https://dart.dev/guides/language/extension-methods).
+> **IMPORTANT**: The **asRx()** method has been added to [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html) using [Extension Methods](https://dart.dev/guides/language/extension-methods).
 
 
 And listen the changes using **rxObserver**:
