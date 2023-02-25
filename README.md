@@ -15,21 +15,21 @@ Inspired by [Recoil](https://recoiljs.org), `RxNotifier` has tools so that the s
 
 We must take into account some architectural limits to execute this Approach:
 
-1. All states must be an atom(RxNotifier instance).
-2. All actions must be an atom(RxNotifier instance).
-3. Business rules must be created in the Reducer and not in the Atom.
+1. All states must be an atom(`RxNotifier` instance).
+2. All actions must be an atom(`RxNotifier` instance).
+3. Business rules must be created in the `Reducer` and not in the Atom.
 
 
 ## Layers
 
-We will have 3 main layers, they are: Atoms, Reducers and Views;
+We will have 3 main layers, they are: `Atoms`, `Reducers` and `Views`;
 
 ![atom](/assets/arch.png)
 
 Note that the View (which is the presentation layer) does not know about the Reducer (which is the business rule execution layer).
 These two layers share atoms that in turn represent the state and the dispatch of state actions.
 
-In Flutter these layers translate to Atom(RxNotifier), Reducer(RxReducer) and View(Widget):
+In Flutter these layers translate to Atom(`RxNotifier`), Reducer(RxReducer) and View(Widget):
 
 ![atom](/assets/flutter-rx.png)
 

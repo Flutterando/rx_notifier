@@ -6,7 +6,7 @@ import 'stores/app_store.dart';
 final injector = AutoInjector(
   on: (i) {
     i.addSingleton(AppStore.new);
-    i.addSingleton(ShopController.new);
+    i.addSingleton(ShopReducer.new);
     i.commit();
   },
 );

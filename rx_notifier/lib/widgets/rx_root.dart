@@ -27,6 +27,8 @@ class RxRoot extends InheritedWidget {
     _stackTrace = StackTrace.current;
     _rxMainContext.track();
     final value = selectFunc();
+    _executeValueForReport(value);
+    _executeListForReport(value);
     final listenables = _rxMainContext.untrack(_stackTrace);
 
     final registre = _Register<T>(listenables, filter);
@@ -62,6 +64,23 @@ class RxRoot extends InheritedWidget {
 
   @override
   InheritedElement createElement() => _RxRootElement(this);
+
+  static void _executeValueForReport(dynamic value) {
+    if (value is ValueListenable) {
+      value.value;
+    } else if (value is RxAction) {
+      value.action;
+    }
+  }
+
+  static void _executeListForReport(dynamic list) {
+    if (list is! Iterable) {
+      return;
+    }
+    for (final item in list) {
+      _executeValueForReport(item);
+    }
+  }
 }
 
 class _RxRootElement extends InheritedElement {

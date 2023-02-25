@@ -94,12 +94,12 @@ class RxAction extends ChangeNotifier {
 /// class CounterReducer extends RxReducer {
 ///   final HomeState state;
 ///
-///   CounterController(this.state) {
+///   CounterReducer(this.state) {
 ///     on(() => [counterState], _increment);
 ///   }
 ///
 ///   void _increment() {
-///     counter.value++;
+///     counterState.value++;
 ///   }
 /// }
 ///
@@ -114,7 +114,7 @@ abstract class RxReducer {
 
   /// reducer register:
   /// ```dart
-  /// on(() => [state.increment], _incrementReducer);
+  /// on(() => [state], _incrementReducer);
   /// ```
   void on(
     List<Object?> Function() rxValues,

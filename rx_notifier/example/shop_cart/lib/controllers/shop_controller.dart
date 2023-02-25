@@ -4,11 +4,11 @@ import 'package:rx_notifier/rx_notifier.dart';
 
 import '../stores/app_store.dart';
 
-class ShopController extends RxController {
+class ShopReducer extends RxReducer {
   final AppStore appStore;
   ShopState get shop => appStore.components.shop;
 
-  ShopController(this.appStore) {
+  ShopReducer(this.appStore) {
     on(() => [shop.fetchProductsAction], _fetchProductsReducer);
     on(() => [shop.addProductAction], addProductReducer);
   }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
-import 'controllers/counter_controller.dart';
 import 'pages/counter_page.dart';
+import 'reducers/counter_reducer.dart';
 import 'stores/counter_store.dart';
 
 late final CounterStore counterStore;
-late final CounterController homeController;
+late final CounterReducer homeReducer;
 
 void main() {
   counterStore = CounterStore();
-  homeController = CounterController(counterStore);
+  homeReducer = CounterReducer(counterStore);
 
   runApp(RxRoot(child: MyApp()));
 }
