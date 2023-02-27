@@ -12,6 +12,18 @@ This pattern consists of the state being an object with its own reactivity.
 
 ![atom](/assets/atom.png)
 
+
+## Motivation
+
+Developers still have trouble understanding state management in Flutter.
+We had this conclusion after several research in the community fluttering and also
+in partner companies.
+Atomic State is a noob-friendly state management approuch at the same time
+that maintains a reliable structure thinking of scalability and maintenance.
+
+More details, read this [Medium article on the subject](https://medium.com/@jacobmoura/introdu%C3%A7%C3%A3o-ao-estado-at%C3%B4mico-no-flutter-com-rxnotifier-73ad9edf8718).
+
+
 ## Rules
 
 We must take into account some architectural limits to execute this Approach:
