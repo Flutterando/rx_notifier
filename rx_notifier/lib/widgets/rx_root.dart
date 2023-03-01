@@ -27,8 +27,6 @@ class RxRoot extends InheritedWidget {
     _stackTrace = StackTrace.current;
     _rxMainContext.track();
     final value = selectFunc();
-    _executeValueForReport(value);
-    _executeListForReport(value);
     final listenables = _rxMainContext.untrack(_stackTrace);
 
     final registre = _Register<T>(listenables, filter);
@@ -57,6 +55,43 @@ class RxRoot extends InheritedWidget {
     return value;
   }
 
+  static void _callback<T>(
+    BuildContext context,
+    T Function() selectFunc,
+    void Function(T? value) effectFunc, {
+    bool Function()? filter,
+  }) {
+    final disposer = rxObserver<T>(
+      selectFunc,
+      effect: effectFunc,
+      filter: filter,
+    );
+
+    final registre = _Register<T>(const {}, null, disposer);
+    final inherited = context.dependOnInheritedWidgetOfExactType<RxRoot>(
+      aspect: registre,
+    );
+    if (inherited == null) {
+      disposer.call();
+      final stackTraceString = StackTrace.current.toString();
+      final stackFrame = LineSplitter //
+              .split(stackTraceString)
+          .skip(1)
+          .firstWhere(
+            (frame) => !frame.contains('RxRoot'),
+            orElse: () => '',
+          );
+
+      debugPrintStack(
+        stackTrace: StackTrace.fromString(stackFrame),
+        label: '\u001b[31m'
+            'Please, add the *RxRoot*'
+            ' widget as your first widget.',
+      );
+    }
+    inherited?.updateShouldNotify(inherited);
+  }
+
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return false;
@@ -64,23 +99,6 @@ class RxRoot extends InheritedWidget {
 
   @override
   InheritedElement createElement() => _RxRootElement(this);
-
-  static void _executeValueForReport(dynamic value) {
-    if (value is ValueListenable) {
-      value.value;
-    } else if (value is RxAction) {
-      value.action;
-    }
-  }
-
-  static void _executeListForReport(dynamic list) {
-    if (list is! Iterable) {
-      return;
-    }
-    for (final item in list) {
-      _executeValueForReport(item);
-    }
-  }
 }
 
 class _RxRootElement extends InheritedElement {
@@ -144,14 +162,13 @@ class _RxRootElement extends InheritedElement {
 
   void _removeListeners(HashSet<_Register> registers) {
     for (final register in registers) {
-      register.mutableCallback.dispose?.call();
+      register.dispose();
     }
     registers.clear();
   }
 
   HashSet<_Register> _getRegisters(Element dependent) {
-    return getDependencies(dependent) as HashSet<_Register>? ??
-        HashSet<_Register>();
+    return getDependencies(dependent) as HashSet<_Register>? ?? HashSet<_Register>();
   }
 }
 
@@ -165,19 +182,27 @@ class _Register<T> {
   final Set<Listenable> listenables;
   final mutableCallback = _MutableCallback();
   final bool Function()? filter;
-  _Register(this.listenables, this.filter);
+  final RxDisposer? disposer;
+
+  _Register(this.listenables, this.filter, [this.disposer]);
 
   void listener() {
     mutableCallback.callback?.call();
+  }
+
+  void dispose() {
+    mutableCallback.dispose?.call();
+    disposer?.call();
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     final setEquals = const DeepCollectionEquality().equals;
-    return other is _Register<T> && setEquals(other.listenables, listenables);
+
+    return other is _Register<T> && setEquals(other.listenables, listenables) && other.disposer == disposer;
   }
 
   @override
-  int get hashCode => listenables.hashCode;
+  int get hashCode => listenables.hashCode ^ disposer.hashCode;
 }

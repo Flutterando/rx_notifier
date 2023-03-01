@@ -1,3 +1,7 @@
+## [2.1.0] - 2023-03-01
+* Added [RxCallback] Widget.
+* Added `context.callback()`. 
+
 ## [2.0.0+6] - 2023-02-22
 
 * (Breaking change) - `RxNotifier.value` now accept equal values. <br>

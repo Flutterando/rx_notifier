@@ -64,4 +64,15 @@ extension ContextSelectionExtension on BuildContext {
   T select<T>(T Function() selectFunc, {bool Function()? filter}) {
     return RxRoot._select<T>(this, selectFunc, filter: filter);
   }
+
+  /// Used to assign effect functions that will react to the
+  /// reactivity of the declared rxNotifier,
+  /// similar to the [rxObserver] function.
+  void callback<T>(
+    T Function() selectFunc,
+    void Function(T? value) effectFunc, {
+    bool Function()? filter,
+  }) {
+    return RxRoot._callback(this, selectFunc, effectFunc, filter: filter);
+  }
 }

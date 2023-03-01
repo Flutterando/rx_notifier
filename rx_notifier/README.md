@@ -5,11 +5,8 @@ This extension aims to transparently apply **functional reactive programming (TF
 
 ## Install
 
-Add in pubspec.yaml:
-
 ```yaml
-dependencies:
-  rx_notifier: <version>
+flutter pub add rx_notifier
 ```
 
 ## Understanding Extension.
@@ -157,7 +154,20 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## Flutter and RxNotifier: OPTIONAL RxBuilder
+3. To execute methods that call something external to the state like [Dialog], [SnackBar] and etc,
+use `context.callback` to listen for one or several [RxNotifier] subscribing to a callback.
+
+```dart
+
+ @override
+  Widget build(BuildContext context) {
+    context.callback(() => errorState.value, _showSnachbar);
+
+    ...
+```
+
+
+## Widgets: RxBuilder
 A builder for managing state in a scoped way is also available:
 
 ```dart
@@ -169,6 +179,20 @@ Widget build(BuildContext context){
 ```
 
 > **IMPORTANT**: Both the `context.select` method and the builder have the `filter` property.
+
+
+## Widgets: RxCallback
+This widget can replace `context.callback` by getting a product list from rxObserver.
+```dart
+Widget build(BuildContext context){
+    return RxCallback(
+        effects: [
+          rxObserver(() => errorState.value, effect: _showSnachbar)
+        ]
+        child: BodyWidget(),
+    );
+}
+```
 
 ## Collections and Asyncs
 
