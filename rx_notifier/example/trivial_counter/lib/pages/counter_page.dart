@@ -1,14 +1,15 @@
-import 'package:example/main.dart';
 import 'package:example/pages/other_page.dart';
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
+
+import '../atoms/counter.dart';
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context.select(() => [counterStore.count]);
+    final value = context.select(() => counterState.value);
 
     return Scaffold(
       body: Center(
@@ -25,11 +26,11 @@ class CounterPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                counterStore.countText,
+                countText,
                 style: const TextStyle(fontSize: 40),
               ),
               Text(
-                '${counterStore.count}',
+                '$value',
                 style: const TextStyle(fontSize: 23),
               ),
             ],
@@ -38,7 +39,7 @@ class CounterPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => counterStore.increment(),
+        onPressed: () => counterState.value++,
       ),
     );
   }

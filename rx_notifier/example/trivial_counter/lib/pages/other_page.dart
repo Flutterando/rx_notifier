@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
-import '../main.dart';
+import '../atoms/counter.dart';
 
 class OtherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    context.select(() => [counterStore.count]);
+    final value = context.select(() => counterState.value);
 
     return Scaffold(
       appBar: AppBar(),
@@ -15,11 +15,11 @@ class OtherPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              counterStore.countText,
+              countText,
               style: TextStyle(fontSize: 40),
             ),
             Text(
-              '${counterStore.count}',
+              '$value',
               style: TextStyle(fontSize: 23),
             ),
           ],
@@ -27,7 +27,7 @@ class OtherPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.remove),
-        onPressed: () => counterStore.decrement(),
+        onPressed: () => counterState.value--,
       ),
     );
   }

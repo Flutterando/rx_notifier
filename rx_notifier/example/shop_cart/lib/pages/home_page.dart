@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
-import '../stores/app_store.dart';
+import '../atoms/product.dart';
 
 class HomePage extends StatefulWidget {
-  final ShopState shopState;
-  const HomePage({super.key, required this.shopState});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  ShopState get shopState => widget.shopState;
-
   @override
   void initState() {
     super.initState();
-    shopState.fetchProductsAction();
+    fetchProductsAction();
   }
 
   @override
   Widget build(BuildContext context) {
-    final products = context.select(() => shopState.filteredProducts);
+    context.select(() => [filteredProductsState.length, filteredProductsState]);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,15 +28,15 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           ListView.builder(
-            itemCount: products.length,
+            itemCount: filteredProductsState.length,
             padding: EdgeInsets.only(top: 60),
             itemBuilder: (context, index) {
-              final product = products[index];
+              final product = filteredProductsState[index];
               return ListTile(
                 title: Text(product.title),
                 subtitle: Text('price: ${product.price}'),
                 onTap: () {
-                  shopState.addProductAction = product;
+                  addProductAction.value = product;
                 },
               );
             },
@@ -51,7 +48,7 @@ class _HomePageState extends State<HomePage> {
               child: TextFormField(
                 initialValue: '',
                 onChanged: (value) {
-                  shopState.filterText = value;
+                  filterTextState.value = value;
                 },
                 decoration: InputDecoration(
                   hintText: 'Search...',
@@ -70,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: RxBuilder(
           builder: (_) {
-            return Text('${shopState.cartProducts.length}');
+            return Text('${cartProductsState.length}');
           },
         ),
       ),
