@@ -1,3 +1,7 @@
+## [2.2.0] - 2023-03-05
+* Added [rxNext] function for wait the next change of a [RxNotifer].
+* Refactor: [RxAction].
+
 ## [2.1.0] - 2023-03-01
 * Added [RxCallback] Widget.
 * Added `context.callback()`. 

@@ -72,12 +72,25 @@ class RxNotifier<T> extends ValueNotifier<T> {
 /// increment();
 ///
 /// ```
-class RxAction extends ChangeNotifier {
+class RxAction extends RxNotifier<RxVoid> {
+  /// Send action
+  /// ```dart
+  /// final counter = RxNotifier<int>();
+  /// final increment = RxAction();
+  ///
+  /// rxObserver(
+  ///     () => increment.action,
+  ///     effect: (_) => counter.value++,
+  /// );
+  ///
+  /// // dispatch action
+  /// increment();
+  ///
+  /// ```
+  RxAction() : super(rxVoid);
+
   /// Track action listener
-  RxVoid get action {
-    _rxMainContext.reportRead(this);
-    return rxVoid;
-  }
+  RxVoid get action => value;
 
   /// dispatch action
   void call() {
