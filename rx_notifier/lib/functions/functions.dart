@@ -47,11 +47,11 @@ RxDisposer rxObserver<T>(
 
 /// Wait the next change of a [RxNotifier].
 /// The [timeLimit] is 10 seconds by default.
-Future<T?> rxNext<T>(
+Future<T> rxNext<T>(
   RxNotifier<T> rx, {
   Duration timeLimit = const Duration(seconds: 10),
 }) async {
-  final completer = Completer<T?>();
+  final completer = Completer<T>();
   final disposable = rxObserver<T>(
     () => rx.value,
     effect: completer.complete,
@@ -59,7 +59,7 @@ Future<T?> rxNext<T>(
 
   final result = await completer.future.timeout(
     timeLimit,
-    onTimeout: () => null,
+    onTimeout: () => rx.value,
   );
   disposable();
   return result;
