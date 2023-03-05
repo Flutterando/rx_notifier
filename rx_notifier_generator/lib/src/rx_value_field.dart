@@ -24,7 +24,7 @@ class RxValueField {
     /// 
     
     late final $nameRx = RxNotifier<$type>(super.$name);
-    ValueListenable<$type> get ${name}Listenable => $nameRx;
+    RxValueListenable<$type> get ${name}Listenable => $nameRx;
 
     @override
     set ${name}($type $nameValue) => $nameRx.value = $nameValue;

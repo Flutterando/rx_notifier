@@ -26,9 +26,20 @@ part 'widgets/rx_root.dart';
 
 final _rxMainContext = _RxContext();
 
+/// An interface for subclasses of [Listenable] that expose a [value].
+abstract class RxValueListenable<T> implements ValueListenable<T> {
+  /// Wait the next change of a [RxNotifier].
+  /// The [timeLimit] is 10 seconds by default.
+  /// [onAction] callback execute after register listener.
+  Future<T> next(
+    Function onAction, {
+    Duration timeLimit = const Duration(seconds: 10),
+  });
+}
+
 /// Extension to ValueNotifier by transparently applying
 /// functional reactive programming (TFRP).
-class RxNotifier<T> extends ValueNotifier<T> {
+class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
   @override
   T get value {
     _rxMainContext.reportRead(this);
@@ -55,6 +66,18 @@ class RxNotifier<T> extends ValueNotifier<T> {
   void setValue(T newValue) {
     _value = newValue;
     notifyListeners();
+  }
+
+  @override
+  Future<T> next(
+    Function onAction, {
+    Duration timeLimit = const Duration(seconds: 10),
+  }) {
+    return rxNext<T>(
+      this,
+      onAction: onAction,
+      timeLimit: timeLimit,
+    );
   }
 }
 

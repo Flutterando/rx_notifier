@@ -47,8 +47,10 @@ RxDisposer rxObserver<T>(
 
 /// Wait the next change of a [RxNotifier].
 /// The [timeLimit] is 10 seconds by default.
+/// [onAction] callback execute after register listener.
 Future<T> rxNext<T>(
-  RxNotifier<T> rx, {
+  RxValueListenable<T> rx, {
+  Function? onAction,
   Duration timeLimit = const Duration(seconds: 10),
 }) async {
   final completer = Completer<T>();
@@ -56,7 +58,18 @@ Future<T> rxNext<T>(
     () => rx.value,
     effect: completer.complete,
   );
-
+  final actionResult = onAction?.call();
+  assert(
+    () {
+      if (actionResult is Future) {
+        throw FlutterError.fromParts(<DiagnosticsNode>[
+          ErrorSummary('onAction returned a Future.'),
+        ]);
+      }
+      return true;
+    }(),
+    'onAction returned a Future.',
+  );
   final result = await completer.future.timeout(
     timeLimit,
     onTimeout: () => rx.value,

@@ -1,5 +1,6 @@
-## [2.2.0+1] - 2023-03-05
+## [2.2.0+2] - 2023-03-05
 * Added [rxNext] function for wait the next change of a [RxNotifer].
+* Added [RxNotifier.next];
 * Refactor: [RxAction].
 
 ## [2.1.0] - 2023-03-01
