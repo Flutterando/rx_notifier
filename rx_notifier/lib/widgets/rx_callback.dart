@@ -48,6 +48,6 @@ class _RxCallbackState extends State<RxCallback> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return widget.child;
   }
 }
