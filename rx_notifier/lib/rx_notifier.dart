@@ -68,6 +68,9 @@ class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
     notifyListeners();
   }
 
+  /// Re-call all the registered listeners.
+  void call() => notifyListeners();
+
   @override
   Future<T> next(
     Function onAction, {
@@ -82,43 +85,14 @@ class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
 }
 
 /// Send action
-/// ```dart
-/// final counter = RxNotifier<int>();
-/// final increment = RxAction();
-///
-/// rxObserver(
-///     () => increment.action,
-///     effect: (_) => counter.value++,
-/// );
-///
-/// // dispatch action
-/// increment();
-///
-/// ```
+@Deprecated('Use [RxNotifier] instead.')
 class RxAction extends RxNotifier<RxVoid> {
   /// Send action
-  /// ```dart
-  /// final counter = RxNotifier<int>();
-  /// final increment = RxAction();
-  ///
-  /// rxObserver(
-  ///     () => increment.action,
-  ///     effect: (_) => counter.value++,
-  /// );
-  ///
-  /// // dispatch action
-  /// increment();
-  ///
-  /// ```
+  @Deprecated('Use [RxNotifier] instead.')
   RxAction() : super(rxVoid);
 
   /// Track action listener
   RxVoid get action => value;
-
-  /// dispatch action
-  void call() {
-    notifyListeners();
-  }
 }
 
 /// The layer responsible for making business decisions

@@ -1,3 +1,7 @@
+## [2.2.1] - 2023-03-16
+* @Deprecated [RxAction]. Use [RxNotifier] instead.
+* [feat]: Added `RxNotifier.call` for re-call all the registered listeners.
+
 ## [2.2.0+2] - 2023-03-05
 * Added [rxNext] function for wait the next change of a [RxNotifer].
 * Added [RxNotifier.next];
