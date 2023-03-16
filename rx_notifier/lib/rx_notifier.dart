@@ -26,9 +26,20 @@ part 'widgets/rx_root.dart';
 
 final _rxMainContext = _RxContext();
 
+/// An interface for subclasses of [Listenable] that expose a [value].
+abstract class RxValueListenable<T> implements ValueListenable<T> {
+  /// Wait the next change of a [RxNotifier].
+  /// The [timeLimit] is 10 seconds by default.
+  /// [onAction] callback execute after register listener.
+  Future<T> next(
+    Function onAction, {
+    Duration timeLimit = const Duration(seconds: 10),
+  });
+}
+
 /// Extension to ValueNotifier by transparently applying
 /// functional reactive programming (TFRP).
-class RxNotifier<T> extends ValueNotifier<T> {
+class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
   @override
   T get value {
     _rxMainContext.reportRead(this);
@@ -56,6 +67,18 @@ class RxNotifier<T> extends ValueNotifier<T> {
     _value = newValue;
     notifyListeners();
   }
+
+  @override
+  Future<T> next(
+    Function onAction, {
+    Duration timeLimit = const Duration(seconds: 10),
+  }) {
+    return rxNext<T>(
+      this,
+      onAction: onAction,
+      timeLimit: timeLimit,
+    );
+  }
 }
 
 /// Send action
@@ -72,12 +95,25 @@ class RxNotifier<T> extends ValueNotifier<T> {
 /// increment();
 ///
 /// ```
-class RxAction extends ChangeNotifier {
+class RxAction extends RxNotifier<RxVoid> {
+  /// Send action
+  /// ```dart
+  /// final counter = RxNotifier<int>();
+  /// final increment = RxAction();
+  ///
+  /// rxObserver(
+  ///     () => increment.action,
+  ///     effect: (_) => counter.value++,
+  /// );
+  ///
+  /// // dispatch action
+  /// increment();
+  ///
+  /// ```
+  RxAction() : super(rxVoid);
+
   /// Track action listener
-  RxVoid get action {
-    _rxMainContext.reportRead(this);
-    return rxVoid;
-  }
+  RxVoid get action => value;
 
   /// dispatch action
   void call() {
