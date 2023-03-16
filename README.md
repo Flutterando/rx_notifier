@@ -47,14 +47,11 @@ In Flutter these layers translate to Atom(`RxNotifier`), Reducer(RxReducer) and 
 ![atom](/assets/flutter-rx.png)
 
 
-## Atoms (RxNotifier and RxAction)
+## Atoms (RxNotifier)
 
 Atom represent the reactive state of an application.
 Each atom has its own reactivity.
 
-> **IMPORTANT**: The **RxAction()** is a special `RxNotifier`
-other than a value assignment to notify listeners.
-Just call the `call()` method;
 
 ```dart
 // atoms
@@ -74,7 +71,7 @@ List<Product> get filteredProductsState {
 
 // actions
 final selectedProductState = RxNotifier<Product?>(null);
-final fetchProductsState = RxAction();
+final fetchProductsState = RxNotifier(null);
 ```
 
 
@@ -106,7 +103,7 @@ class ProductReducer extends RxReducer {
 }
 ```
 
-`Reducers` can register methods/functions that listen to the reactivity of an `Atom`, be it `RxNotifier` or `RxAction`.
+`Reducers` can register methods/functions that listen to the reactivity of an `Atom`(**RxNotifier**).
 
 ## View (Widget)
 

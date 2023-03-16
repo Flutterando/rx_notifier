@@ -16,4 +16,4 @@ List<ProductModel> get filteredProductsState {
 
 // actions
 final addProductAction = RxNotifier<ProductModel?>(null);
-final fetchProductsAction = RxAction();
+final fetchProductsAction = RxNotifier(null);

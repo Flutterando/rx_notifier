@@ -51,9 +51,15 @@ class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
 
   T _value;
 
-  ///  Extension to ValueNotifier by transparently applying
+  /// Extension to ValueNotifier by transparently applying
   /// functional reactive programming (TFRP).
   RxNotifier(this._value) : super(_value);
+
+  /// Factory that return a RxNotifier<RxVoid> instance.
+  /// ```dart
+  /// RxNotifier<RxVoid>(rxVoid); => RxNotifier.action();
+  /// ```
+  static RxNotifier<RxVoid> action() => RxNotifier(rxVoid);
 
   /// The current value stored in this notifier.
   @override
@@ -135,21 +141,15 @@ abstract class RxReducer {
     final rxDisposer = rxObserver<void>(
       () {
         for (final value in rxValues()) {
-          _prexec(value);
+          if (value is RxNotifier) {
+            value.value;
+          }
         }
       },
       effect: (_) => reducer(),
       filter: filter,
     );
     _rxDisposers.add(rxDisposer);
-  }
-
-  void _prexec(Object? object) {
-    if (object is RxAction) {
-      object.action;
-    } else if (object is RxNotifier) {
-      object.value;
-    }
   }
 
   /// dispose all registers
