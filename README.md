@@ -60,6 +60,8 @@ Just call the `call()` method;
 // atoms
 final productsState = <Product>[].asRx();
 final productTextFilterState = RxNotifier<String>('');
+
+// computed
 List<Product> get filteredProductsState {
      if(productTextFilterState.value.isEmpty()){
          return productsState.value;
@@ -89,17 +91,18 @@ The layer responsible for making business decisions will be called `Reducer`:
 ```dart
 class ProductReducer extends RxReducer {
 
-     ProductReducer(){
-         on(() => [fetchProductsState.action], _fetchProducts);
-         on(() => [selectedProductState.value], _selectProduct);
-     }
+    ProductReducer(){
+        on(() => [fetchProductsState.action], _fetchProducts);
+        on(() => [selectedProductState.value], _selectProduct);
+    }
 
-     void _fetchProducts(){
-         ...
-     }
-     void _selectProduct(){
-         ...
-     }
+    void _fetchProducts(){
+        ...
+    }
+
+    void _selectProduct(){
+        ...
+    }
 }
 ```
 
