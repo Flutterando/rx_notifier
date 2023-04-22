@@ -156,8 +156,8 @@ abstract class RxReducer {
   void dispose() {
     for (final disposer in _rxDisposers) {
       disposer();
-      _rxDisposers.clear();
     }
+    _rxDisposers.clear();
   }
 }
 
