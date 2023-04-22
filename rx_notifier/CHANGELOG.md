@@ -1,3 +1,7 @@
+## [2.2.2] - 2023-04-22
+* Fix: Clear and addAll RxMap without rebuilding N times? #9.
+* Fix: Fix disposers list cleaning before disposing all RxDisposers
+
 ## [2.2.1] - 2023-03-16
 * @Deprecated [RxAction]. Use [RxNotifier] instead.
 * [feat]: Added `RxNotifier.call` for re-call all the registered listeners.

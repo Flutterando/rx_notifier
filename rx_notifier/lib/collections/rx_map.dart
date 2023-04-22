@@ -14,6 +14,14 @@ class RxMap<K, V> extends ChangeNotifier with MapMixin<K, V> {
   static RxMap<K, V> of<K, V>(Map<K, V> map) => RxMap<K, V>(map);
 
   @override
+  void addAll(Map<K, V> other) {
+    other.forEach((K key, V value) {
+      _map[key] = value;
+    });
+    notifyListeners();
+  }
+
+  @override
   V? operator [](Object? key) {
     _rxMainContext.reportRead(this);
     return _map[key];
