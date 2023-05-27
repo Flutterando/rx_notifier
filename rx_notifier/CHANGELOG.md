@@ -1,3 +1,5 @@
+## [2.2.3] - 2023-05-27
+
 ## [2.2.2] - 2023-04-22
 * Fix: Clear and addAll RxMap without rebuilding N times? #9.
 * Fix: Fix disposers list cleaning before disposing all RxDisposers
