@@ -62,7 +62,13 @@ class RxRoot extends InheritedWidget {
     bool Function()? filter,
   }) {
     final disposer = rxObserver<T>(
-      selectFunc,
+      () {
+        T? value;
+        if (context.mounted) {
+          selectFunc();
+        }
+        return value;
+      },
       effect: effectFunc,
       filter: filter,
     );
