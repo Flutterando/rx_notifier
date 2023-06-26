@@ -73,6 +73,11 @@ class RxNotifier<T> extends ValueNotifier<T> implements RxValueListenable<T> {
     notifyListeners();
   }
 
+  /// Tear-offs for set value without reaction.
+  void setValueWithoutReaction(T newValue) {
+    _value = newValue;
+  }
+
   /// Re-call all the registered listeners.
   void call() => notifyListeners();
 
@@ -142,6 +147,8 @@ abstract class RxReducer {
         for (final value in rxValues()) {
           if (value is RxNotifier) {
             value.value;
+          } else {
+            value;
           }
         }
       },

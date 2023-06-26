@@ -6,3 +6,4 @@ linter:
     use_to_and_as_if_applicable: false
     avoid_returning_this: false
     unawaited_futures: false
+    use_setters_to_change_properties: false

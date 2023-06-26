@@ -1,3 +1,6 @@
+## [2.3.0] - 2023-06-26
+* Added `setValueWithoutReaction`;
+
 ## [2.2.4] - 2023-06-08
 * Fix callback error
 
