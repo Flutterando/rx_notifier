@@ -122,32 +122,31 @@ RxNotifeir has tools that help with state management and propagation for the Wid
 1. Add the RxRoot Widget to the root of the app:
 
 ```dart
-void main(){
-  runApp(RxRoot(child: AppWidget()));
+void main() {
+  runApp(const RxRoot(child: MaterialApp(home: HomePage())));
 }
 ```
 
 2. Now just use the `context.select` method passing the RxNotifier objects:
 
 ```dart
-
 final counter = RxNotifier(0);
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final value = context.select(() => counter.value);
-
     return Scaffold(
       body: Center(
-        child: Text(
-          '${home.count}',
-           style: TextStyle(fontSize: 23),
-        )
-      ),
+          child: Text(
+        '$value',
+        style: const TextStyle(fontSize: 23),
+      )),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => counter.count++,
+        child: const Icon(Icons.add),
+        onPressed: () => counter.value++,
       ),
     );
   }
